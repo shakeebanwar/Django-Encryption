@@ -10,6 +10,14 @@ import base64
 from Crypto import Random
 from Crypto.Cipher import AES
 
+
+from django.core.mail import send_mail,EmailMultiAlternatives
+from django.conf import settings
+
+
+
+
+
 BS = 16
 pad = lambda s: bytes(s + (BS - len(s) % BS) * chr(BS - len(s) % BS), 'utf-8')
 unpad = lambda s : s[0:-ord(s[-1:])]
@@ -111,12 +119,41 @@ class User_Signup(APIView):
 
 
 
+class home(APIView):
+    def get(self,request):
+
+        # 1st method to send email
+
+        token = 8678
+        username = "shakeeb"
+        subject = 'Reset Email'
+        email_from = settings.EMAIL_HOST_USER
+        to = "shoaibbilal101@gmail.com"
+
+        html_content = f'''
+            <h1 style="text-align:center; font-family: 'Montserrat', sans-serif;">Finish creating your account</h1>
+                <p> 
+        Your email address has been registered with lms. To validate your account and activate your ability to send email campaigns, please complete your profile by clicking the link below:</p>
+            <div style='width:300px; margin:0 auto;'> <a href='http://127.0.0.1:8000/forget/{token}/{username}' style=" background-color:#0066ff; border: none;  color: white; padding: 15px 32px;  text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer; font-family: PT Sans, sans-serif;" >click here</a>
+        </div>
+            '''
+
+        msg = EmailMultiAlternatives(subject, html_content, email_from, [to])
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+        return HttpResponse('sent')
 
 
+        
 
+        # 2nd method
 
-
-
+        # subject = 'Reset Email'
+        # message = 'Your reset password is 6768788 '
+        # email_from = settings.EMAIL_HOST_USER
+        # recipient_list = ['shoaibbilal101@gmail.com',]
+        # send_mail( subject, html_content, email_from, recipient_list )
+        # return HttpResponse("send")
 
 
 
