@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django_crontab',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,6 +40,16 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'aestesting',
     'rest_framework',
+    'dbbackup',
+    
+]
+
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location':  os.path.join(BASE_DIR, 'backup')}
+
+
+CRONJOBS = [
+    ('*/1 * * * *', 'AES.cron.my_backup')
 ]
 
 MIDDLEWARE = [
@@ -140,3 +151,6 @@ EMAIL_HOST_PASSWORD = 'fazalhus'
 # EMAIL_PORT = 465
 # EMAIL_HOST_USER = 'haider@hnh6.xyz'
 # EMAIL_HOST_PASSWORD = 'alwaysbehappy'
+
+
+# >python manage.py dbrestore
